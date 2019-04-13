@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <h4>Today</h4>
-    <div style="padding-top: 5px;" v-if="data">
+    <h4>Sets</h4>
+    <div class="set-container" v-for="(item, index) in data" v-bind:key="index">
       <div class="header">
-        <div class="header-item">{{ data.weekday }}</div>
+        <div class="header-item">{{item.weekday}}</div>
       </div>
-      <div v-for="(value, key) in data.exercises" v-bind:key="key">
+      <div v-for="(value, key) in item.exercises" v-bind:key="key">
         <div class="gymset-data">
           <div class="font-header">{{ key }}</div>
           <div class="font">Weight: {{ value.weight + ' ' + value.unit }}</div>
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import { dateConversion } from "../services/helpers";
-import { getSetByDay } from "../services/http-service";
+import "vue-awesome/icons/calendar-day";
+import { getSetsById } from "../services/http-service";
 
 export default {
-  name: "Home",
+  name: "Sets",
   data() {
     return {
       loading: false,
@@ -43,7 +43,7 @@ export default {
     fetchData() {
       this.error = null;
       this.$root.startLoading;
-      getSetByDay(3, dateConversion()).then(res => {
+      getSetsById(3).then(res => {
         this.data = res.data;
         this.$root.stopLoading;
       });
@@ -53,6 +53,25 @@ export default {
 </script>
 
 <style>
+.set-container {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  display: inline-block;
+  transition: background-color 0.15s ease-in-out;
+  -moz-transition: background-color 0.15s ease-in-out;
+  -webkit-transition: background-color 0.15s ease-in-out;
+}
+.set-container:hover {
+  background-color: rgb(230, 230, 230);
+  cursor: pointer;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  display: inline-block;
+  opacity: 1.0;
+  transition: background-color 0.15s ease-in-out;
+  -moz-transition: background-color 0.15s ease-in-out;
+  -webkit-transition: background-color 0.15s ease-in-out;
+}
 .header-item {
   width: 100px;
   text-align: center;
